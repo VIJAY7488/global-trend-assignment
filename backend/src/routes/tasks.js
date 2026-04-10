@@ -25,3 +25,9 @@ router.get("/", (req, res) => {
 
     res.json({ data: tasks, total: tasks.length });
 });
+
+// POST /tasks - Create a new task
+router.post("/", (req, res) => {
+    const task = TaskStore.create({ title: req.body.title });
+    res.status(201).json({ data: task });
+});
