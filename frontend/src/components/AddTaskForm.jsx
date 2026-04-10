@@ -3,25 +3,25 @@ import { useState } from "react";
 
 export default function AddTaskForm({ onAdd }) {
     const [title, setTitle] = useState("");
-    const [submitting, setSubmutting] = useState(false);
-    const [formError, setFromError] = useState(null);
+    const [submitting, setSubmitting] = useState(false);
+    const [formError, setFormError] = useState(null);
 
     const handleSubmit = async (e) => {
-        e.preventdefault();
+        e.preventDefault();
         const trimmed = title.trim();
         if(!trimmed) {
-            setFromError("Task title can not be empty.");
+            setFormError("Task title can not be empty.");
             return;
         }
-        setSubmutting(true);
-        setFromError(null);
+        setSubmitting(true);
+        setFormError(null);
         try {
             await onAdd(trimmed);
             setTitle("");
         } catch (error) {
-            setFromError(error.message);
+            setFormError(error.message);
         } finally {
-            setSubmutting(false);
+            setSubmitting(false);
         }
     };
 
@@ -34,7 +34,7 @@ export default function AddTaskForm({ onAdd }) {
                     placeholder="Add a new task..."
                     value={title}
                     maxLength={200}
-                    onChange={(e) => { setTitle(e.target.value); setFromError(null); }}
+                    onChange={(e) => { setTitle(e.target.value); setFormError(null); }}
                     disabled={submitting}
                     aria-label="New task title"
                 />
