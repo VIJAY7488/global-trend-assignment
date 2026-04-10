@@ -50,7 +50,7 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }) {
         if (e.key === "Escape") { setEditing(false); setEditValue(task.title); };
     };
 
-    const dateStr = new Date(task.createdAt).toLocalDateString(undefined, {
+    const dateStr = new Date(task.createdAt).toLocaleDateString(undefined, {
         month: "short", day: "numeric", year: "numeric",
     });
 
