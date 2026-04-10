@@ -10,7 +10,8 @@ export default function FilterBar({ active, onChange, counts }){
             {FILTERS.map(({value, label}) => (
                 <button
                     key={value}
-                    className={`filter-bar__btn${active === value ? "filter-bar__btn--active" : ""}`}
+                    type="button"
+                    className={`filter-bar__btn${active === value ? " filter-bar__btn--active" : ""}`}
                     onClick={() => onChange(value)}
                     aria-current={active === value ? "true" : undefined}>
                     {label}
