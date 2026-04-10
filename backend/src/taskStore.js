@@ -31,3 +31,47 @@ function saveTasks(tasks) {
     }
 }
 
+let tasks = loadTasks();
+
+const TaskStore = {
+    getAll() {
+        return [...tasks];
+    },
+
+    getById(id) {
+        return tasks.find((t) => t.id === id) || null;
+    },
+
+    create({ title }) {
+        const task = {
+            id: uuidv4(),
+            title: title.trim(),
+            completed: false,
+            createdAt: new Date().toISOString(),
+        };
+        tasks.push(task);
+        saveTasks(tasks);
+        return task;
+    },
+
+    update(id, fields) {
+        const index = tasks.findIndex((t) => t.id === id);
+        if(index === -1) return null;
+        tasks[index] = { ...tasks[index], ...fields};
+        saveTasks(tasks);
+        return tasks[index];
+    },
+
+    delete(id) {
+        const index = tasks.findIndex((t) => t.id === id);
+        if(index === -1) return false;
+        tasks.splice(index, 1);
+        saveTasks(tasks);
+        return true;
+    },
+};
+
+
+module.exports = TaskStore;
+
+
