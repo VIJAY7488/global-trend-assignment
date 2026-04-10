@@ -1,6 +1,6 @@
 const express = require("express");
 const TaskStore = require("../taskStore");
-const { validateCreateTask } = require('../middleware/validation');
+const { validateCreateTask, validateUpdateTask } = require('../middleware/validation');
 
 const router = express.Router();
 
@@ -27,7 +27,29 @@ router.get("/", (req, res) => {
 });
 
 // POST /tasks - Create a new task
-router.post("/", (req, res) => {
+router.post("/", validateCreateTask, (req, res) => {
     const task = TaskStore.create({ title: req.body.title });
     res.status(201).json({ data: task });
+});
+
+
+// PATCH /tasks/:id - Update title and/or completed status
+router.patch("/:id", validateUpdateTask, (req, res) => {
+    const { id } = req.params;
+    const { completed, title } = req.body;
+
+    const fields = {};
+    if(completed !== undefined) fields.completed = completed;
+    if(title !== undefined) fields.title = title.trim();
+
+    const updated = TaskStore.updated(id, fields);
+
+    if(!updated) {
+        res.status(400).json({
+            error: "Not found",
+            message: `Task with id '${id}' does not exist.`,
+        });
+    }
+
+    res.json({ data:updated });
 });
