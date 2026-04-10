@@ -1,5 +1,6 @@
 import AddTaskForm from "./components/AddTaskForm";
 import "./App.css"
+import FilterBar from "./components/FilterBar";
 
 
 export default function App() {
@@ -11,6 +12,10 @@ export default function App() {
 
       <main className="app__main">
         <AddTaskForm />
+
+        <div className="app__controls">
+          <FilterBar />
+        </div>
       </main>
     </div>
   )
