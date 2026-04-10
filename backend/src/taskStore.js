@@ -2,7 +2,7 @@ const { v4: uuidv4 } = require("uuid");
 const fs = require("fs");
 const path = require("path");
 
-const DATA_FILE = path(__dirname, "../data/tasks.json");
+const DATA_FILE = path.join(__dirname, "../data/tasks.json");
 
 // Ensure data directory and file exist
 function ensureDtatFile() {
