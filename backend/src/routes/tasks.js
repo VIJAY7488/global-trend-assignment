@@ -53,3 +53,21 @@ router.patch("/:id", validateUpdateTask, (req, res) => {
 
     res.json({ data:updated });
 });
+
+
+// DELETE /tasks/:id - Delete a task
+router.delete("/:id", (req, res) => {
+    const { id } = req.params;
+    const deleted = TaskStore.delete(id);
+
+    if(!deleted) {
+        return res.status(400).json({
+            error: "Not found",
+            message: `Task with id '${id}' does not exist.`,
+        });
+    }
+
+    res.json({ message: `Task '${id}' deleted successfully.`})
+});
+
+module.exports = router;
