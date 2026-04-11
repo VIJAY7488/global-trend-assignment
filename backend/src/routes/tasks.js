@@ -14,9 +14,9 @@ router.get("/", (req, res) => {
     } else if(status === "incomplete") {
         tasks = tasks.filter((t) => !t.completed);
     } else if(status !== undefined) {
-        return res.status(400).json({
+        return res.status(404).json({
             error: "Invalid query parameter",
-            message: "Query param 'status' must be 'completed' or 'incomplete,.",
+            message: "Query param 'status' must be 'completed' or 'incomplete'.",
         });
     }
 
@@ -42,14 +42,15 @@ router.patch("/:id", validateUpdateTask, (req, res) => {
     if(completed !== undefined) fields.completed = completed;
     if(title !== undefined) fields.title = title.trim();
 
-    const updated = TaskStore.updated(id, fields);
+    const updated = TaskStore.update(id, fields);
 
     if(!updated) {
-        res.status(400).json({
+        res.status(404).json({
             error: "Not found",
             message: `Task with id '${id}' does not exist.`,
         });
     }
+    
 
     res.json({ data:updated });
 });
@@ -61,7 +62,7 @@ router.delete("/:id", (req, res) => {
     const deleted = TaskStore.delete(id);
 
     if(!deleted) {
-        return res.status(400).json({
+        return res.status(404).json({
             error: "Not found",
             message: `Task with id '${id}' does not exist.`,
         });
