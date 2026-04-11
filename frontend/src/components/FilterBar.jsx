@@ -13,10 +13,10 @@ export default function FilterBar({ active, onChange, counts }){
                     type="button"
                     className={`filter-bar__btn${active === value ? " filter-bar__btn--active" : ""}`}
                     onClick={() => onChange(value)}
-                    aria-current={active === value ? "true" : undefined}>
+                    aria-current={active === value ? "page" : undefined}>
                     {label}
                     {counts && counts[value] !== undefined && (
-                        <span>{counts[value]}</span>
+                        <span> {counts[value]}</span>
                     )}
                 </button>
             ))}
