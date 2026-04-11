@@ -26,6 +26,7 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }) {
             await onDelete(task.id);
         } catch (error) {
             setItemError(error.message);
+        } finally {
             setBusy(false);
         }
     };
@@ -33,7 +34,7 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }) {
     const handleEditSubmit = async (e) => {
         e.preventDefault();
         const trimmed = editValue.trim();
-        if (!trimmed || trimmed === task.title) { setEditing(false); return; }
+        if (!trimmed || trimmed === task.title.trim()) { setEditing(false); return; }
         setBusy(true);
         setItemError(null);
         try {
@@ -95,6 +96,7 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }) {
                 <div className="task-item__actions">
                     <button
                         className="task-item__btn task-item__btn--edit"
+                        type="button"
                         onClick={() => { setEditing(true); setEditValue(task.title); }}
                         disabled={busy}
                         aria-label="Edit task"
@@ -102,6 +104,7 @@ export default function TaskItem({ task, onToggle, onDelete, onEdit }) {
                     >✏️</button>
                     <button
                         className="task-item__btn task-item__btn--delete"
+                        type="button"
                         onClick={handleDelete}
                         disabled={busy}
                         aria-label="Delete task"

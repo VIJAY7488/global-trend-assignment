@@ -5,16 +5,16 @@ const path = require("path");
 const DATA_FILE = path.join(__dirname, "../data/tasks.json");
 
 // Ensure data directory and file exist
-function ensureDtatFile() {
+function ensureDataFile() {
     const dir = path.dirname(DATA_FILE);
-    if(!fs.existsSync(dir)) fs.mkdirSync(dir, {recursive: true});
-    if(!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE, JSON.stringify([]));
+    if (!fs.existsSync(dir)) fs.mkdirSync(dir, { recursive: true });
+    if (!fs.existsSync(DATA_FILE)) fs.writeFileSync(DATA_FILE, JSON.stringify([]));
 }
 
 
 function loadTasks() {
     try {
-        ensureDtatFile();
+        ensureDataFile();
         const raw = fs.readFileSync(DATA_FILE, "utf-8");
         return JSON.parse(raw);
     } catch (error) {
@@ -24,10 +24,10 @@ function loadTasks() {
 
 function saveTasks(tasks) {
     try {
-        ensureDtatFile();
+        ensureDataFile();
         fs.writeFileSync(DATA_FILE, JSON.stringify(tasks, null, 2));
     } catch (error) {
-       console.error("Failed to persist tasks:", error.message); 
+        console.error("Failed to persist tasks:", error.message);
     }
 }
 
@@ -39,7 +39,8 @@ const TaskStore = {
     },
 
     getById(id) {
-        return tasks.find((t) => t.id === id) || null;
+        const task = tasks.find((t) => t.id === id);
+        return task ? { ...task } : null;
     },
 
     create({ title }) {
@@ -56,15 +57,19 @@ const TaskStore = {
 
     update(id, fields) {
         const index = tasks.findIndex((t) => t.id === id);
-        if(index === -1) return null;
-        tasks[index] = { ...tasks[index], ...fields};
+        if (index === -1) return null;
+        tasks[index] = {
+            ...tasks[index],
+            ...fields,
+            updatedAt: new Date().toISOString()
+        };
         saveTasks(tasks);
         return tasks[index];
     },
 
     delete(id) {
         const index = tasks.findIndex((t) => t.id === id);
-        if(index === -1) return false;
+        if (index === -1) return false;
         tasks.splice(index, 1);
         saveTasks(tasks);
         return true;
